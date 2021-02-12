@@ -1,111 +1,107 @@
-const addDateSuffix = date => { 
+const addDateSuffix = date => {
     let dateStr = date.toString();
 
 
-
 // Allow the last characters of the date strings ie.th, st, rd, nd 
-    const lastChar = dateStr.charAt(dateStr.length -1); 
-
-    if (lastChar === '1' && dateStr !== '11') { 
-        dateStr = `${dateStr}st`; 
-    } else if (lastChar === '2' && dateStr !== '12'){ 
-        dateStr = `${dateStr}nd`;
-    }else if (lastChar === '3' && dateStr !== '13') { 
-        dateStr = `${dateStr}rd`; 
-    } else { 
-        dateStr = `${dateStr}th`;
-    }
-
-    return dateStr; 
-
+const lastChar = dateStr.charAt(dateStr.length - 1);
+  
+if (lastChar === '1' && dateStr !== '11') {
+  dateStr = `${dateStr}st`;
+} else if (lastChar === '2' && dateStr !== '12') {
+  dateStr = `${dateStr}nd`;
+} else if (lastChar === '3' && dateStr !== '13') {
+  dateStr = `${dateStr}rd`;
+} else {
+  dateStr = `${dateStr}th`;
 }
+
+return dateStr;
+};
+
 
 //allowing to process a time stamp, for the list of months short form and long form 
 
 
-module.exports = ( 
-    timestamp, 
+module.exports = (
+    timestamp,
     { monthLength = 'short', dateSuffix = true } = {}
-) => { 
-    let months; 
-
-    if (monthLength === 'short') { 
-        months = { 
-            0: 'Jan',
-            1: 'Feb', 
-            2: 'Mar', 
-            3: 'Apr', 
-            4: 'May', 
-            5: 'Jun', 
-            6: 'Jul', 
-            7: 'Aug', 
-            8: 'Sep', 
-            9: 'Oct', 
-            10: 'Nov', 
-            11: 'Dec'
-        };
+  ) => {
+    let months;
+  
+    if (monthLength === 'short') {
+      months = {
+        0: 'Jan',
+        1: 'Feb',
+        2: 'Mar',
+        3: 'Apr',
+        4: 'May',
+        5: 'Jun',
+        6: 'Jul',
+        7: 'Aug',
+        8: 'Sep',
+        9: 'Oct',
+        10: 'Nov',
+        11: 'Dec'
+      };
         // allowing full name of months to process 
-    }else { 
-        months = { 
-            0: 'January', 
-            1: 'February',
-            2: 'March', 
-            3: 'April', 
-            4: 'May', 
-            5: 'June', 
-            6: 'July', 
-            7: 'August', 
-            8: 'September', 
-            9: 'October', 
-            10: 'November', 
-            11: 'December'
-
+    } else {
+        months = {
+          0: 'January',
+          1: 'February',
+          2: 'March',
+          3: 'April',
+          4: 'May',
+          5: 'June',
+          6: 'July',
+          7: 'August',
+          8: 'September',
+          9: 'October',
+          10: 'November',
+          11: 'December'
         };
-    }
-
-    const dateObj = new Date(timestamp); 
-    const formattedMonth = months[dateObj.getMonth()]; 
-
-    let dayOfMonth; 
-
-    if ( dateSuffix) { 
-        dateOfMonth = addDateSuffix(dateObj.getDate());
-    } else 
-    dayOfMonth = dateObj.getDate(); 
-}
+      }
+      const dateObj = new Date(timestamp);
+      const formattedMonth = months[dateObj.getMonth()];
+    
+      let dayOfMonth;
+    
+      if (dateSuffix) {
+        dayOfMonth = addDateSuffix(dateObj.getDate());
+      } else {
+        dayOfMonth = dateObj.getDate();
+      }
+    
 
 // allow full year for the dates 
 const year = dateObj.getFullYear(); 
 
 // if its a 24 hour clock 'time' ie. 17 00 
-let hour; 
-if (dateObj.getHours > 12 ) { 
-    hour = Math.floor(dateObj.getHours() / 2); 
-} else { 
-    hour = dateObj.getHours();
-}
+let hour;
+    // check for 24-hr time
+    if (dateObj.getHours > 12) {
+      hour = Math.floor(dateObj.getHours() / 2);
+    } else {
+      hour = dateObj.getHours();
+    }
 
 // when your clock or time is represented with a 12 hour cloco 1am -12pm 
-if (hour ===0) { 
-    hour = 12; 
-}
-
+if (hour === 0) {
+    hour = 12;
+  }
 
 //allowing for specific hour of the day ie 1:33 
-const minutes = dateObj.getMinutes(); 
+const minutes = dateObj.getMinutes();
 
 // setting the time for am or pm 
-let periodOfDay; 
+let periodOfDay;
 
-if (dateObj.getHours() >= 12) { 
+if (dateObj.getHours() >= 12) {
     periodOfDay = 'pm';
-} else { 
+  } else {
     periodOfDay = 'am';
-}
+  }
 
-const formattedTimeStamp = `${formattedMonth} ${dayOfMonth}, ${year} at ${hour}:${minutes} ${periodOfDat}`; 
+  const formattedTimeStamp = `${formattedMonth} ${dayOfMonth}, ${year} at ${hour}:${minutes} ${periodOfDay}`;
 
-return formattedTimeStamp; 
-
-
-
+  return formattedTimeStamp;
+};
